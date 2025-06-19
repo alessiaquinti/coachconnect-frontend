@@ -36,20 +36,18 @@ function UserProvider({ children }) {
     try {
       const token = localStorage.getItem("token");
       if (!token) return;
-
-      const response = await fetch(
-        "http://localhost:3000/coachconnect/profile",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
+  
+      const API_BASE_URL = import.meta.env.VITE_API_URL?.replace(/\/$/, "");
+      const response = await fetch(`${API_BASE_URL}/coachconnect/profile`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+  
       if (response.ok) {
         const serverUser = await response.json();
-
+  
         setUser((prevUser) => {
           const updatedUser = { ...prevUser, ...serverUser };
           localStorage.setItem("user", JSON.stringify(updatedUser));
@@ -62,6 +60,7 @@ function UserProvider({ children }) {
       console.log("Errore sincronizzazione:", error);
     }
   };
+  
 
   const logout = () => {
     localStorage.removeItem("token");

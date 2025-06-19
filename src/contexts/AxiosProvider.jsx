@@ -4,8 +4,9 @@ import { createContext, useContext, useEffect } from "react";
 import axios from "axios";
 
 const getBaseURL = () => {
-  return "http://localhost:3000/coachconnect";
+  return import.meta.env.VITE_API_URL + "/coachconnect";
 };
+
 
 const axiosInstance = axios.create({
   baseURL: getBaseURL(),
