@@ -19,6 +19,8 @@ import {
 import BellNotifications from "./BellNotifications";
 
 export default function Sidebar({ pageTitle, children }) {
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
+
   const { user, logout, loading } = useUser();
   const navigate = useNavigate();
   const location = useLocation();
@@ -150,7 +152,7 @@ export default function Sidebar({ pageTitle, children }) {
               {user?.profileImg ? (
                 <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-200 ring-2 ring-white/40 shadow-lg">
                   <img
-                    src={`http://localhost:3000${user.profileImg}`}
+                    src={`${API_BASE_URL}${user.profileImg}`}
                     alt="Profilo"
                     className="w-full h-full object-cover"
                     onError={(e) => {
@@ -305,7 +307,7 @@ export default function Sidebar({ pageTitle, children }) {
                   {user?.profileImg ? (
                     <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-200">
                       <img
-                        src={`http://localhost:3000${user.profileImg}`}
+                        src={`${API_BASE_URL}${user.profileImg}`}
                         alt="Profilo"
                         className="w-full h-full object-cover pointer-events-none"
                         onError={(e) => {

@@ -22,6 +22,8 @@ import { toast } from "react-hot-toast";
 
 export default function CoachProfile() {
   usePageTitle("Il Mio Profilo");
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
+
   const { user, updateUser } = useUser();
   const axios = useAxios();
   const navigate = useNavigate();
@@ -219,7 +221,7 @@ export default function CoachProfile() {
                     />
                   ) : profileImage ? (
                     <img
-                      src={`http://localhost:3000${profileImage}`}
+                      src={`${API_BASE_URL}${profileImage}`}
                       alt="Profilo"
                       className="w-full h-full object-cover"
                       onError={(e) => {

@@ -24,6 +24,8 @@ import { useNavigate } from "react-router-dom";
 
 export default function MemberProfile() {
   usePageTitle("Il Mio Profilo");
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
+
   const { user, updateUser } = useUser();
   const axios = useAxios();
   const fileInputRef = useRef(null);
@@ -86,22 +88,22 @@ export default function MemberProfile() {
 
   const uploadAvatar = async () => {
     if (!imagePreview) return;
-  
+
     setUploadingImage(true);
     try {
       const response = await fetch(imagePreview);
       const blob = await response.blob();
-  
+
       const formData = new FormData();
       formData.append("avatar", blob, "avatar.jpg");
-  
+
       const result = await axios.post("/profile/avatar", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-  
+
       setImagePreview(null);
-    updateUser({ ...user, profileImg: result.data.avatarUrl });
-  
+      updateUser({ ...user, profileImg: result.data.avatarUrl });
+
       toast.success("Avatar aggiornato con successo! ");
     } catch (error) {
       toast.error("Errore durante l'upload dell'immagine");
@@ -109,7 +111,6 @@ export default function MemberProfile() {
       setUploadingImage(false);
     }
   };
-  
 
   return (
     <div className="min-h-screen relative overflow-hidden">
@@ -166,27 +167,26 @@ export default function MemberProfile() {
             <div className="text-center space-y-6">
               <div className="relative inline-block">
                 <div className="w-32 h-32 rounded-full overflow-hidden bg-gradient-to-br from-blue-100 to-purple-100 border-4 border-white/50 shadow-2xl backdrop-blur-sm">
-                {imagePreview ? (
-  <img
-    src={imagePreview}
-    alt="Preview"
-    className="w-full h-full object-cover"
-  />
-) : user?.profileImg ? (
-  <img
-    src={`http://localhost:3000${user.profileImg}`}
-    alt="Avatar"
-    className="w-full h-full object-cover"
-    onError={(e) => {
-      e.target.style.display = "none";
-    }}
-  />
-) : (
-  <div className="w-full h-full flex items-center justify-center">
-    <User className="h-12 w-12 text-blue-400" />
-  </div>
-)}
-
+                  {imagePreview ? (
+                    <img
+                      src={imagePreview}
+                      alt="Preview"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : user?.profileImg ? (
+                    <img
+                      src={`${API_BASE_URL}${user.profileImg}`}
+                      alt="Avatar"
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.target.style.display = "none";
+                      }}
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <User className="h-12 w-12 text-blue-400" />
+                    </div>
+                  )}
                 </div>
                 <button
                   onClick={() => fileInputRef.current?.click()}

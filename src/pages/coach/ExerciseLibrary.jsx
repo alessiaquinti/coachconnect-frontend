@@ -27,6 +27,8 @@ import usePageTitle from "@/hooks/usePageTitle";
 
 export default function ExerciseLibrary() {
   usePageTitle("Esercizi");
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
+
   const axios = useAxios();
   const navigate = useNavigate();
   const [esercizi, setEsercizi] = useState([]);
@@ -43,11 +45,10 @@ export default function ExerciseLibrary() {
 
   const getImageUrl = (imageUrl) => {
     if (!imageUrl) return null;
-    if (imageUrl.startsWith("http")) {
-      return imageUrl;
-    }
-    return `http://localhost:3000${imageUrl}`;
+    if (imageUrl.startsWith("http")) return imageUrl;
+    return `${API_BASE_URL}${imageUrl}`;
   };
+  
 
   const loadEsercizi = () => {
     setIsLoading(true);

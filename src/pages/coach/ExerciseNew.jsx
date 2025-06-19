@@ -23,6 +23,8 @@ import ExerciseImageUpload from "@/components/ExerciseImageUpload";
 import { toast } from "react-hot-toast";
 
 export default function ExerciseNew() {
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
+
   const axios = useAxios();
   const navigate = useNavigate();
 
@@ -352,13 +354,8 @@ export default function ExerciseNew() {
                           src={
                             immagineUrl.startsWith("http")
                               ? immagineUrl
-                              : `http://localhost:3000${immagineUrl}`
+                              : `${API_BASE_URL}${immagineUrl}`
                           }
-                          alt={nome || "Anteprima esercizio"}
-                          className="w-full h-full object-cover"
-                          onError={(e) => {
-                            e.target.style.display = "none";
-                          }}
                         />
                       </div>
                     )}

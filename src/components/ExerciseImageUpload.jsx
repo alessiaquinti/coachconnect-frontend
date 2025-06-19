@@ -1,55 +1,62 @@
-"use client"
+"use client";
 
-import { useState, useRef } from "react"
-import { useAxios } from "@/contexts/AxiosProvider"
-import { Camera, X, ImageIcon, Loader2 } from "lucide-react"
-import { Text } from "@radix-ui/themes"
-import { toast } from "react-hot-toast"
+import { useState, useRef } from "react";
+import { useAxios } from "@/contexts/AxiosProvider";
+import { Camera, X, ImageIcon, Loader2 } from "lucide-react";
+import { Text } from "@radix-ui/themes";
+import { toast } from "react-hot-toast";
 
-export default function ExerciseImageUpload({ currentImageUrl, onImageChange, disabled = false }) {
-  const axios = useAxios()
-  const fileInputRef = useRef(null)
-  const [imagePreview, setImagePreview] = useState(null)
-  const [uploading, setUploading] = useState(false)
+export default function ExerciseImageUpload({
+  currentImageUrl,
+  onImageChange,
+  disabled = false,
+}) {
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
+
+  const axios = useAxios();
+  const fileInputRef = useRef(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [uploading, setUploading] = useState(false);
 
   const handleImageSelect = async (event) => {
-    const file = event.target.files[0]
-    if (!file) return
+    const file = event.target.files[0];
+    if (!file) return;
 
     // Validazione file
     if (!file.type.startsWith("image/")) {
-      toast.error("Seleziona un file immagine valido")
-      return
+      toast.error("Seleziona un file immagine valido");
+      return;
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      toast.error("Il file è troppo grande. Massimo 5MB.")
-      return
+      toast.error("Il file è troppo grande. Massimo 5MB.");
+      return;
     }
 
-    setUploading(true)
+    setUploading(true);
     try {
-      const formData = new FormData()
-      formData.append("exerciseImage", file)
+      const formData = new FormData();
+      formData.append("exerciseImage", file);
 
       const result = await axios.post("/exercises/upload-image", formData, {
         headers: { "Content-Type": "multipart/form-data" },
-      })
+      });
 
-      onImageChange(result.data.imageUrl)
-      toast.success("Immagine caricata con successo!")
+      onImageChange(result.data.imageUrl);
+      toast.success("Immagine caricata con successo!");
     } catch (error) {
-      console.error("Errore upload:", error)
-      toast.error("Errore durante l'upload dell'immagine")
+      console.error("Errore upload:", error);
+      toast.error("Errore durante l'upload dell'immagine");
     } finally {
-      setUploading(false)
+      setUploading(false);
     }
-  }
+  };
 
   const removeCurrentImage = () => {
-    onImageChange("")
-    toast.success("Immagine rimossa")
-  }
+    onImageChange("");
+    toast.success("Immagine rimossa");
+  };
+
 
   return (
     <div className="space-y-4">
@@ -59,17 +66,25 @@ export default function ExerciseImageUpload({ currentImageUrl, onImageChange, di
           // Immagine attuale
           <div className="relative w-full h-48 bg-gray-100 rounded-lg overflow-hidden group">
             <img
-              src={currentImageUrl.startsWith("http") ? currentImageUrl : `http://localhost:3000${currentImageUrl}`}
+              src={
+                currentImageUrl.startsWith("http")
+                  ? currentImageUrl
+                  : `${API_BASE_URL}${currentImageUrl}`
+              }
               alt="Immagine esercizio"
               className="w-full h-full object-cover"
               onError={(e) => {
-                console.log("Errore caricamento immagine:", currentImageUrl)
-                e.target.style.display = "none"
-                e.target.nextSibling.style.display = "flex"
+                console.log("Errore caricamento immagine:", currentImageUrl);
+                e.target.style.display = "none";
+                e.target.nextSibling.style.display = "flex";
               }}
             />
+
             {/* Fallback */}
-            <div className="w-full h-full flex items-center justify-center bg-gray-200" style={{ display: "none" }}>
+            <div
+              className="w-full h-full flex items-center justify-center bg-gray-200"
+              style={{ display: "none" }}
+            >
               <ImageIcon className="h-12 w-12 text-gray-400" />
             </div>
             {/* Overlay per rimuovere */}
@@ -134,5 +149,5 @@ export default function ExerciseImageUpload({ currentImageUrl, onImageChange, di
         </button>
       </div>
     </div>
-  )
+  );
 }

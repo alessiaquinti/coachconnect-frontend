@@ -7,6 +7,7 @@ import { Text } from "@radix-ui/themes";
 import { Lock, ArrowRight, Dumbbell, Mail } from "lucide-react";
 
 export default function Login() {
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -20,7 +21,8 @@ export default function Login() {
     setIsLoading(true);
 
     try {
-      const res = await fetch("http://localhost:3000/coachconnect/auth/login", {
+
+      fetch(`${import.meta.env.VITE_API_URL}/coachconnect/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
