@@ -72,6 +72,14 @@ function UserProvider({ children }) {
   const login = (userData, token) => {
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
+    if (userData.mustChangePassword) {
+      navigate("/change-password");
+    } else if (userData.role === "coach") {
+      navigate("/coach/dashboard");
+    } else if (userData.role === "cliente") {
+      navigate("/member/dashboard");
+    }
+    
     if (token) {
       localStorage.setItem("token", token);
     }

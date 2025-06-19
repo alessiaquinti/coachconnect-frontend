@@ -39,6 +39,7 @@ export default function CoachRegister() {
     setErrors({});
 
     try {
+      console.log("📩 Risposta dal server:", data); 
       const API_BASE_URL = import.meta.env.VITE_API_URL?.replace(/\/$/, "");
 const res = await fetch(
   `${API_BASE_URL}/coachconnect/auth/register`,
